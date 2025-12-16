@@ -1,0 +1,35 @@
+body {
+    font-family: 'Tajawal', sans-serif;
+    background-color: #F9FAFB;
+    color: #111827;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #2563EB;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #1D4ED8;
+}
+
+/* Cards */
+.ui-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+/* Headings */
+.section-title {
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Inputs */
+.form-control {
+    border-radius: 12px;
+    padding: 12px;
+}
