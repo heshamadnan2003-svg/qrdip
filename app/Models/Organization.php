@@ -23,49 +23,110 @@ class Organization extends Model
         'settings',
         'is_active',
         'qr_code',
-        'unique_hash'
+        'unique_hash',
     ];
 
     protected $casts = [
-        'settings' => 'array',
-        'is_active' => 'boolean'
+        'settings'  => 'array',
+        'is_active' => 'boolean',
     ];
 
-    // إنشاء slug و hash تلقائياً
+    /*
+    |--------------------------------------------------------------------------
+    | Boot
+    |--------------------------------------------------------------------------
+    */
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($organization) {
-            $organization->slug = Str::slug($organization->name);
-            $organization->unique_hash = Str::random(32);
+            if (empty($organization->slug)) {
+                $organization->slug = Str::slug($organization->name);
+            }
+
+            if (empty($organization->unique_hash)) {
+                $organization->unique_hash = Str::random(32);
+            }
         });
     }
 
-    // العلاقات
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
+    // صاحب النشاط (المدير)
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    // الخدمات
     public function services()
+{
+    return $this->hasMany(\App\Models\Service::class);
+}
+
+
+    // أوقات الدوام
+   public function workingHours()
+{
+    return $this->hasMany(WorkingHour::class);
+}
+
+
+    // أيام العطل
+    public function daysOff()
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(DayOff::class);
     }
 
-    public function timeSlots()
+    // الأوقات المحظورة
+    public function blockedTimes()
     {
-        return $this->hasMany(TimeSlot::class);
+        return $this->hasMany(BlockedTime::class);
     }
 
+    // الحجوزات
     public function bookings()
     {
         return $this->hasMany(Booking::class);
     }
 
-    // دوال مساعدة
-    public function getBookingPageUrl()
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
+
+    // رابط صفحة الحجز العامة (QR)
+    public function bookingUrl()
     {
-        return route('booking.page', $this->unique_hash);
+        return route('organization.show', $this->slug);
     }
+
+    public function holidays()
+{
+    return $this->hasMany(Holiday::class);
+}
+
+public function times($slug, $serviceId)
+{
+    $organization = Organization::where('slug', $slug)->firstOrFail();
+
+    $service = $organization->services()
+        ->where('id', $serviceId)
+        ->firstOrFail();
+
+    // لاحقًا سنجلب الأوقات المتاحة هنا
+    return view('organization.times', compact('organization', 'service'));
+}
+public function busyTimes()
+{
+    return $this->hasMany(BusyTime::class);
+}
+
+
 }

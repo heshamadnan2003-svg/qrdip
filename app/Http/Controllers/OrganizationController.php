@@ -4,72 +4,128 @@ namespace App\Http\Controllers;
 
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\Models\WorkingHour;
+use App\Models\Booking;
+use App\Models\Service;
+
 
 
 class OrganizationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-
-
     public function show($slug)
+    {
+        $organization = Organization::where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        return view('organization.show', compact('organization'));
+    }
+
+  public function services($slug)
 {
     $organization = Organization::where('slug', $slug)
         ->with('services')
         ->firstOrFail();
 
-    return view('organization.show', compact('organization'));
+    $workingDays = WorkingHour::where('organization_id', $organization->id)
+        ->whereNotNull('start_time')
+        ->whereNotNull('end_time')
+        ->orderBy('day_of_week')
+        ->get()
+        ->map(function ($day) {
+            $day->day_name = $this->arabicDayName($day->day_of_week);
+            return $day;
+        });
+
+    return view('organization.services', compact(
+        'organization',
+        'workingDays'
+    ));
+}
+
+public function times($slug, Service $service, Request $request)
+{
+    $organization = Organization::where('slug', $slug)->firstOrFail();
+
+    $date = $request->get('date', now()->toDateString());
+
+    $dayNumber = \Carbon\Carbon::parse($date)->dayOfWeek; // 0 = الأحد
+
+    // 🕒 دوام اليوم
+    $workingHour = WorkingHour::where('organization_id', $organization->id)
+        ->where('day_of_week', $dayNumber)
+        ->first();
+
+    if (!$workingHour || !$workingHour->start_time || !$workingHour->end_time) {
+        return view('organization.times', [
+            'organization' => $organization,
+            'service'      => $service,
+            'times'        => [],
+            'date'         => $date,
+        ]);
+    }
+
+    $duration = (int) $service->duration;
+
+    $start = \Carbon\Carbon::parse($workingHour->start_time);
+    $end   = \Carbon\Carbon::parse($workingHour->end_time);
+
+    // ⛔ الأوقات المشغولة
+    $busyTimes = \App\Models\BusyTime::where('organization_id', $organization->id)
+        ->where('date', $date)
+        ->get();
+
+    $times = [];
+
+    while ($start->copy()->addMinutes($duration)->lte($end)) {
+
+        $currentStart = $start->format('H:i:s');
+        $currentEnd   = $start->copy()->addMinutes($duration)->format('H:i:s');
+
+        // ❌ محجوز
+        $isBooked = Booking::where('organization_id', $organization->id)
+            ->where('booking_date', $date)
+            ->where('start_time', $currentStart)
+            ->where('status', 'confirmed')
+            ->exists();
+
+        // ❌ مشغول
+        $isBusy = $busyTimes->contains(function ($busy) use ($currentStart, $currentEnd) {
+            return $currentStart < $busy->end_time &&
+                   $currentEnd   > $busy->start_time;
+        });
+
+        if (!$isBooked && !$isBusy) {
+            $times[] = $start->format('H:i');
+        }
+
+        $start->addMinutes($duration);
+    }
+
+    return view('organization.times', compact(
+        'organization',
+        'service',
+        'times',
+        'date'
+    ));
+}
+
+
+private function arabicDayName($dayNumber)
+{
+    return [
+        0 => 'السبت',
+        1 => 'الأحد',
+        2 => 'الاثنين',
+        3 => 'الثلاثاء',
+        4 => 'الأربعاء',
+        5 => 'الخميس',
+        6 => 'الجمعة',
+    ][$dayNumber] ?? '';
 }
 
 
 
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Organization $organization)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Organization $organization)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Organization $organization)
-    {
-        //
-    }
 }

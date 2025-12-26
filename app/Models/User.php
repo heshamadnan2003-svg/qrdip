@@ -10,6 +10,16 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected static function booted()
+{
+    static::creating(function ($user) {
+        if (empty($user->role)) {
+            $user->role = 'manager';
+        }
+    });
+}
+
+
     protected $fillable = [
         'name',
         'email',
@@ -55,7 +65,8 @@ class User extends Authenticatable
 
     // العلاقة مع الجهة (إذا كان جهة منظمة)
     public function organization()
-    {
-        return $this->hasOne(\App\Models\Organization::class);
-    }
+{
+    return $this->hasOne(\App\Models\Organization::class);
+}
+
 }

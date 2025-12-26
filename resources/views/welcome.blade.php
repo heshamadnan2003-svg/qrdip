@@ -8,21 +8,18 @@
         {{-- النص الرئيسي --}}
         <div class="col-md-6 mb-4">
             <h1 class="fw-bold mb-3">
-                مرحبًا بك في <span class="text-primary">QRDIP</span>
+                {{ __('messages.welcome_title') }}
+                <span class="text-primary">{{ __('messages.app_name') }}</span>
             </h1>
 
             <p class="text-muted fs-5 mb-4">
-                منصة ذكية لإدارة الحجوزات باستخدام رمز QR،  
-                تمكّن مقدمي الخدمات من تنظيم مواعيدهم  
-                وتسهّل على الزبائن عملية الحجز.
+                {{ __('messages.welcome_description') }}
             </p>
 
             <div class="d-flex gap-3 flex-wrap">
-                
-
                 @auth
                     <a href="{{ route('home') }}" class="btn btn-success btn-lg">
-                        الذهاب إلى لوحة التحكم
+                        {{ __('messages.go_to_dashboard') }}
                     </a>
                 @endauth
             </div>
@@ -31,7 +28,7 @@
         {{-- صورة --}}
         <div class="col-md-6 text-center">
             <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png"
-                 alt="QR Booking"
+                 alt="{{ __('messages.welcome_image_alt') }}"
                  class="img-fluid"
                  style="max-width: 320px">
         </div>
@@ -41,40 +38,50 @@
     {{-- شرح طريقة العمل --}}
     <div class="row text-center">
 
-        <h3 class="section-title mb-4">كيف يعمل QRDIP؟</h3>
+        <h3 class="section-title mb-4">
+            {{ __('messages.how_it_works_title') }}
+        </h3>
 
         <div class="col-md-3 mb-4">
             <div class="ui-card h-100">
-                <h5 class="mb-2">📝 تسجيل النشاط</h5>
+                <h5 class="mb-2">
+                    📝 {{ __('messages.how_step_register_title') }}
+                </h5>
                 <p class="text-muted mb-0">
-                    يقوم مقدم الخدمة بإنشاء حساب وإدخال بيانات نشاطه وخدماته
+                    {{ __('messages.how_step_register_desc') }}
                 </p>
             </div>
         </div>
 
         <div class="col-md-3 mb-4">
             <div class="ui-card h-100">
-                <h5 class="mb-2">⚙️ إنشاء الصفحة</h5>
+                <h5 class="mb-2">
+                    ⚙️ {{ __('messages.how_step_page_title') }}
+                </h5>
                 <p class="text-muted mb-0">
-                    يتم إنشاء صفحة خاصة ورمز QR تلقائيًا لكل نشاط
+                    {{ __('messages.how_step_page_desc') }}
                 </p>
             </div>
         </div>
 
         <div class="col-md-3 mb-4">
             <div class="ui-card h-100">
-                <h5 class="mb-2">📱 مسح الرمز</h5>
+                <h5 class="mb-2">
+                    📱 {{ __('messages.how_step_scan_title') }}
+                </h5>
                 <p class="text-muted mb-0">
-                    يقوم الزبون بمسح رمز QR للاطلاع على الخدمات والمواعيد
+                    {{ __('messages.how_step_scan_desc') }}
                 </p>
             </div>
         </div>
 
         <div class="col-md-3 mb-4">
             <div class="ui-card h-100">
-                <h5 class="mb-2">✅ الحجز</h5>
+                <h5 class="mb-2">
+                    ✅ {{ __('messages.how_step_booking_title') }}
+                </h5>
                 <p class="text-muted mb-0">
-                    يتم الحجز بسهولة ويصل الطلب مباشرة لمقدم الخدمة
+                    {{ __('messages.how_step_booking_desc') }}
                 </p>
             </div>
         </div>

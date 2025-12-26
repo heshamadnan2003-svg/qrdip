@@ -1,35 +1,264 @@
-body {
-    font-family: 'Tajawal', sans-serif;
-    background-color: #F9FAFB;
-    color: #111827;
+/* ============================= */
+/* QRDIP Soft Design System */
+/* ============================= */
+
+:root {
+    --primary: #4F6EF7;
+
+    --bg-main: #F7F8FC;
+    --bg-card: #FFFFFF;
+    --bg-soft: #EEF2FF;
+
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+
+    --border: #E5E7EB;
+
+    --info-soft: #E0E7FF;
+    --success-soft: #DCFCE7;
+    --warning-soft: #FEF3C7;
+    --danger-soft: #FEE2E2;
 }
 
+/* ============================= */
+/* Global */
+/* ============================= */
+
+body {
+    font-family: 'Tajawal', system-ui, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+}
+
+/* ============================= */
+/* Typography */
+/* ============================= */
+
+h1, h2, h3, h4, h5 {
+    font-weight: 700;
+}
+
+p, .text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* ============================= */
+/* Navbar */
+/* ============================= */
+
+.navbar {
+    background-color: #0F172A !important;
+}
+
+/* ============================= */
+/* Cards */
+/* ============================= */
+
+.card {
+    background-color: var(--bg-card);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+}
+
+.card.shadow-sm {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.04) !important;
+}
+
+/* ============================= */
 /* Buttons */
+/* ============================= */
+
+.btn {
+    border-radius: 10px;
+    font-weight: 500;
+}
+
 .btn-primary {
-    background-color: #2563EB;
-    border: none;
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+/* ============================= */
+/* Forms */
+/* ============================= */
+
+.form-control {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.15rem rgba(79, 110, 247, 0.15);
+}
+
+/* ============================= */
+/* Dashboard Cards */
+/* ============================= */
+
+.dashboard-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.dashboard-card .icon {
+    font-size: 1.5rem;
+}
+
+.dashboard-card .label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.dashboard-card .value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+/* ============================= */
+/* Dark Mode */
+/* ============================= */
+
+body.dark-mode {
+    background-color: #0B1220;
+    color: #E5E7EB;
+}
+
+body.dark-mode .card {
+    background-color: #111827;
+    border-color: #1F2937;
+}
+
+body.dark-mode .text-muted {
+    color: #9CA3AF !important;
+}
+
+body.dark-mode .form-control {
+    background-color: #111827;
+    color: #E5E7EB;
+    border-color: #1F2937;
+}
+
+body.dark-mode .navbar {
+    background-color: #020617 !important;
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #1D4ED8;
+    background-color: #3F5AE0;
+    border-color: #3F5AE0;
 }
 
-/* Cards */
-.ui-card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+.btn-secondary {
+    background-color: #F1F5F9;
+    border-color: #E5E7EB;
+    color: #0F172A;
 }
 
-/* Headings */
-.section-title {
-    font-weight: 700;
-    margin-bottom: 20px;
+.btn-secondary:hover {
+    background-color: #E5E7EB;
+}
+
+.btn-outline-edit {
+    color: #334155;
+    border: 1px solid #CBD5E1;
+    background-color: transparent;
+}
+
+.btn-outline-edit:hover {
+    background-color: #F1F5F9;
+}
+
+
+.btn-soft-danger {
+    background-color: var(--danger-soft);
+    color: #991B1B;
+    border: 1px solid #FECACA;
+}
+
+.btn-soft-danger:hover {
+    background-color: #FECACA;
+}
+
+
+.btn-soft-success {
+    background-color: var(--success-soft);
+    color: #065F46;
+    border: 1px solid #BBF7D0;
+}
+
+.btn-soft-success:hover {
+    background-color: #BBF7D0;
+}
+
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+/* ============================= */
+/* Forms UX Enhancements */
+/* ============================= */
+
+/* Labels */
+.form-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #374151;
 }
 
 /* Inputs */
 .form-control {
-    border-radius: 12px;
-    padding: 12px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+/* Input hover */
+.form-control:hover {
+    border-color: var(--primary);
+}
+
+/* Placeholder */
+.form-control::placeholder {
+    color: #9CA3AF;
+}
+
+/* Validation */
+.is-invalid {
+    border-color: var(--danger);
+}
+
+.invalid-feedback {
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+/* Required star */
+.form-label.required::after {
+    content: " *";
+    color: var(--danger);
+}
+
+/* Buttons inside forms */
+form .btn {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+}
+
 }

@@ -18,6 +18,29 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
+protected function create(array $data)
+{
+    return User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        'role' => 'manager',
+    ]);
+}
+
+
+protected function redirectTo()
+{
+    if (auth()->user()->role === 'manager') {
+        session(['onboarding.active' => true]);
+        return route('manager.onboarding.company');
+    }
+
+    return '/home';
+}
+
+
+
     /**
      * Handle register request
      */
@@ -33,11 +56,29 @@ class RegisterController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user', // مهم
+            'role' => 'manager', // مهم
         ]);
 
         Auth::login($user);
 
         return redirect()->route('user.home');
     }
+
+    protected function registered(Request $request, $user)
+{
+    // لو المستخدم مدير
+    if ($user->role === 'manager') {
+
+        // تفعيل onboarding
+        session([
+            'onboarding.active' => true,
+        ]);
+
+        return redirect()->route('manager.onboarding.company');
+    }
+
+    // غير ذلك (user / admin)
+    return redirect('/home');
+}
+
 }

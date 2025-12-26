@@ -1,77 +1,60 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container py-5" style="max-width:600px">
 
-    {{-- معلومات الجهة --}}
-    <div class="ui-card mb-4">
-        <h2 class="fw-bold mb-2">{{ $organization->name }}</h2>
+    <div class="card shadow-sm">
+        <div class="card-body text-center">
 
-        <p class="text-muted mb-3">
-            {{ $organization->description }}
-        </p>
+            <h2 class="fw-bold mb-2">
+                {{ $organization->name }}
+            </h2>
 
-        <div class="row">
+            @if($organization->category)
+                <span class="badge bg-secondary mb-3">
+                    {{ $organization->category }}
+                </span>
+            @endif
 
-            <div class="col-md-4 mb-2">
-                <strong>📂 التصنيف:</strong>
-                <span class="text-muted">{{ $organization->category }}</span>
+            @if($organization->description)
+                <p class="text-muted mt-3">
+                    {{ $organization->description }}
+                </p>
+            @endif
+
+            <hr>
+
+            <div class="{{ app()->getLocale() === 'ar' ? 'text-end' : 'text-start' }}">
+                @if($organization->address)
+                    <p>
+                        📍 <strong>{{ __('messages.address') }}:</strong>
+                        {{ $organization->address }}
+                    </p>
+                @endif
+
+                @if($organization->contact_phone)
+                    <p>
+                        📞 <strong>{{ __('messages.phone') }}:</strong>
+                        {{ $organization->contact_phone }}
+                    </p>
+                @endif
+
+                @if($organization->contact_email)
+                    <p>
+                        ✉️ <strong>{{ __('messages.email') }}:</strong>
+                        {{ $organization->contact_email }}
+                    </p>
+                @endif
             </div>
 
-            <div class="col-md-4 mb-2">
-                <strong>📞 الهاتف:</strong>
-                <span class="text-muted">{{ $organization->contact_phone }}</span>
-            </div>
-
-            <div class="col-md-4 mb-2">
-                <strong>📍 العنوان:</strong>
-                <span class="text-muted">{{ $organization->address }}</span>
+            <div class="d-grid mt-4">
+                <a href="{{ route('org.services', $organization->slug) }}"
+                   class="btn btn-primary btn-lg">
+                    🔔 {{ __('messages.book_now') }}
+                </a>
             </div>
 
         </div>
-    </div>
-
-    {{-- الخدمات --}}
-    <div class="ui-card mb-4">
-        <h4 class="section-title mb-3">✂️ الخدمات المقدمة</h4>
-
-        @if($organization->services->count())
-            <div class="table-responsive">
-                <table class="table align-middle">
-                    <thead>
-                        <tr>
-                            <th>الخدمة</th>
-                            <th>السعر</th>
-                            <th>المدة</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($organization->services as $service)
-                            <tr>
-                                <td>{{ $service->name }}</td>
-                                <td>{{ $service->price }} </td>
-                                <td>{{ $service->duration }} دقيقة</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @else
-            <p class="text-muted mb-0">
-                لا توجد خدمات مضافة حاليًا.
-            </p>
-        @endif
-    </div>
-
-    {{-- زر الحجز (مستقبليًا) --}}
-    <div class="text-center">
-        <button class="btn btn-primary btn-lg" disabled>
-            📅 حجز موعد (قريبًا)
-        </button>
-
-        <p class="text-muted mt-2">
-            سيتم تفعيل الحجز الإلكتروني قريبًا
-        </p>
     </div>
 
 </div>

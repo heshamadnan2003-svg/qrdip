@@ -14,5 +14,11 @@ class Service extends Model
 ];
 
 
+public function organization()
+{
+    return $this->belongsTo(Organization::class);
+}
+
+
 
 }

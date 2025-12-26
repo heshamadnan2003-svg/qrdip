@@ -50,4 +50,39 @@ class ServiceController extends Controller
             ->route('manager.services')
             ->with('success', 'تمت إضافة الخدمة بنجاح');
     }
+    public function update(Request $request, Service $service)
+{
+    $request->validate([
+        'name'     => 'required|string|max:255',
+        'price'    => 'required|numeric|min:0',
+        'duration' => 'required|integer|min:1',
+    ]);
+
+    // حماية: التأكد أن الخدمة للمدير نفسه
+    abort_if(
+        $service->organization_id !== auth()->user()->organization->id,
+        403
+    );
+
+    $service->update([
+        'name'     => $request->name,
+        'price'    => $request->price,
+        'duration' => $request->duration,
+    ]);
+
+    return back()->with('success', 'تم تحديث الخدمة بنجاح');
+}
+
+public function destroy(Service $service)
+{
+    abort_if(
+        $service->organization_id !== auth()->user()->organization->id,
+        403
+    );
+
+    $service->delete();
+
+    return back()->with('success', 'تم حذف الخدمة بنجاح');
+}
+
 }

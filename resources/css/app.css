@@ -9,3 +9,34 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* ===== اختيار وقت الحجز ===== */
+
+.time-btn {
+    border: 2px solid #0d6efd;
+    color: #0d6efd;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.time-btn:hover {
+    background-color: #e7f1ff;
+}
+
+.time-btn.active {
+    background-color: #0d6efd;
+    color: #fff;
+    border-color: #0d6efd;
+}
+
+.time-slot {
+    border: 2px solid #0d6efd;
+    background: white;
+    color: #0d6efd;
+}
+
+.time-slot.active {
+    background: #0d6efd;
+    color: white;
+}
+

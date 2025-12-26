@@ -7,31 +7,34 @@
 
             <div class="card">
                 <div class="card-header">
-                    ✂️ الاشتراك كمقدّم خدمة
+                    ✂️ {{ __('messages.apply_provider_title') }}
                 </div>
 
                 <div class="card-body">
 
-                   <form method="POST" action="{{ route('provider.apply.store') }}">
-    @csrf
+                    <form method="POST" action="{{ route('provider.apply.store') }}">
+                        @csrf
 
                         @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul class="mb-0">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
                         {{-- اسم الخدمة --}}
                         <div class="mb-3">
-                            <label class="form-label">اسم الخدمة
-                            <input type="text" name="name"
+                            <label class="form-label">
+                                {{ __('messages.service_name') }}
+                            </label>
+                            <input type="text"
+                                   name="name"
                                    class="form-control @error('name') is-invalid @enderror"
-                                   value="{{ old('name') }}" required>
+                                   value="{{ old('name') }}"
+                                   required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -39,11 +42,15 @@
 
                         {{-- التصنيف --}}
                         <div class="mb-3">
-                            <label class="form-label">التصنيف</label>
-                            <input type="text" name="category"
+                            <label class="form-label">
+                                {{ __('messages.category') }}
+                            </label>
+                            <input type="text"
+                                   name="category"
                                    class="form-control @error('category') is-invalid @enderror"
-                                   placeholder="مثال: حلاق، عيادة، مركز تجميل"
-                                   value="{{ old('category') }}" required>
+                                   placeholder="{{ __('messages.category_example') }}"
+                                   value="{{ old('category') }}"
+                                   required>
                             @error('category')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -51,7 +58,9 @@
 
                         {{-- الوصف --}}
                         <div class="mb-3">
-                            <label class="form-label">وصف مختصر</label>
+                            <label class="form-label">
+                                {{ __('messages.short_description') }}
+                            </label>
                             <textarea name="description"
                                       class="form-control @error('description') is-invalid @enderror"
                                       rows="3">{{ old('description') }}</textarea>
@@ -62,10 +71,14 @@
 
                         {{-- بريد التواصل --}}
                         <div class="mb-3">
-                            <label class="form-label">بريد التواصل</label>
-                            <input type="email" name="contact_email"
+                            <label class="form-label">
+                                {{ __('messages.contact_email') }}
+                            </label>
+                            <input type="email"
+                                   name="contact_email"
                                    class="form-control @error('contact_email') is-invalid @enderror"
-                                   value="{{ old('contact_email') }}" required>
+                                   value="{{ old('contact_email') }}"
+                                   required>
                             @error('contact_email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -73,8 +86,11 @@
 
                         {{-- هاتف التواصل --}}
                         <div class="mb-3">
-                            <label class="form-label">رقم الهاتف</label>
-                            <input type="text" name="contact_phone"
+                            <label class="form-label">
+                                {{ __('messages.contact_phone') }}
+                            </label>
+                            <input type="text"
+                                   name="contact_phone"
                                    class="form-control @error('contact_phone') is-invalid @enderror"
                                    value="{{ old('contact_phone') }}">
                             @error('contact_phone')
@@ -84,7 +100,9 @@
 
                         {{-- العنوان --}}
                         <div class="mb-3">
-                            <label class="form-label">العنوان</label>
+                            <label class="form-label">
+                                {{ __('messages.address') }}
+                            </label>
                             <textarea name="address"
                                       class="form-control @error('address') is-invalid @enderror"
                                       rows="2">{{ old('address') }}</textarea>
@@ -96,7 +114,7 @@
                         {{-- زر الإرسال --}}
                         <div class="d-grid">
                             <button type="submit" class="btn btn-success">
-                                🚀 إرسال الطلب
+                                🚀 {{ __('messages.submit_application') }}
                             </button>
                         </div>
 
