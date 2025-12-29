@@ -24,13 +24,26 @@
                     <th>{{ __('messages.booking_date') }}</th>
                     <th>{{ __('messages.booking_time') }}</th>
                     <th>{{ __('messages.booking_status') }}</th>
+                    <th>{{ __('messages.actions') }}</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach($bookings as $booking)
+                    @php
+                        $status = booking_status_badge($booking->status);
+
+                        // ⏱ وقت الحجز الكامل
+                        $bookingDateTime = \Carbon\Carbon::parse(
+                            $booking->booking_date . ' ' . $booking->start_time
+                        );
+
+                        // ⏰ الوقت الحالي (السيرفر)
+                        $now = now();
+                    @endphp
+
                     <tr>
                         <td>{{ $booking->customer_name }}</td>
-
                         <td>{{ $booking->customer_phone }}</td>
 
                         <td>
@@ -44,34 +57,59 @@
 
                         <td>{{ $booking->booking_date }}</td>
 
-                        <td>{{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}</td>
-
                         <td>
-                            @if($booking->status === 'confirmed')
-                                <span class="badge bg-success mb-2 d-block">
-                                    {{ __('messages.booking_confirmed') }}
-                                </span>
+                            {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}
+                        </td>
 
+                        {{-- حالة الحجز --}}
+                        <td>
+                            <span class="badge bg-{{ $status['class'] }}">
+                                {{ $status['label'] }}
+                            </span>
+                        </td>
+
+                        {{-- الإجراءات --}}
+                        <td>
+
+                            {{-- يظهر فقط إذا:
+                                 1) الحجز مؤكد
+                                 2) وقت الحجز دخل أو انتهى --}}
+                            @if(
+                                $booking->status === 'confirmed'
+                                && $now->greaterThanOrEqualTo($bookingDateTime)
+                            )
+
+                                {{-- تم تنفيذ الموعد --}}
                                 <form method="POST"
-                                      action="{{ route('manager.bookings.cancel', $booking->id) }}">
+                                      action="{{ route('manager.bookings.complete', $booking) }}"
+                                      class="mb-1">
                                     @csrf
-                                    <button class="btn btn-sm btn-outline-danger w-100"
-                                            onclick="return confirm('{{ __('messages.cancel_booking_confirm_manager') }}')">
-                                        ❌ {{ __('messages.cancel_booking') }}
+                                    <button class="btn btn-sm btn-success w-100">
+                                        ✅ {{ __('messages.mark_as_completed') }}
                                     </button>
                                 </form>
 
-                            @elseif($booking->status === 'cancelled')
-                                <span class="badge bg-danger">
-                                    {{ __('messages.booking_cancelled') }}
-                                </span>
+                                {{-- لم يحضر الزبون --}}
+                                <form method="POST"
+                                      action="{{ route('manager.bookings.noShow', $booking) }}"
+                                      class="mb-1">
+                                    @csrf
+                                    <button class="btn btn-sm btn-warning w-100"
+                                            onclick="return confirm('{{ __('messages.confirm_no_show') }}')">
+                                        ❌ {{ __('messages.mark_as_no_show') }}
+                                    </button>
+                                </form>
+
+                            @else
+                                <span class="text-muted">—</span>
                             @endif
+
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-    @endif
 
+    @endif
 </div>
 @endsection

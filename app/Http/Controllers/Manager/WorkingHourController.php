@@ -13,7 +13,7 @@ class WorkingHourController extends Controller
     {
         $organization = auth()->user()->organization;
 
-        // ✅ تأكد من وجود سجل لكل يوم (مرة واحدة فقط)
+        // إنشاء سجل لكل يوم (مرة واحدة فقط)
         for ($day = 0; $day <= 6; $day++) {
             WorkingHour::firstOrCreate(
                 [
@@ -21,19 +21,16 @@ class WorkingHourController extends Controller
                     'day_of_week'     => $day,
                 ],
                 [
-                    // ❗ نحدد القيم الافتراضية بوضوح
                     'start_time' => null,
                     'end_time'   => null,
                 ]
             );
         }
 
-        // ✅ جلب أوقات الدوام مفهرسة حسب رقم اليوم
         $workingHours = WorkingHour::where('organization_id', $organization->id)
             ->get()
             ->keyBy('day_of_week');
 
-        // ✅ الأوقات المشغولة
         $busyTimes = BusyTime::where('organization_id', $organization->id)
             ->orderBy('date')
             ->orderBy('start_time')
@@ -50,13 +47,11 @@ class WorkingHourController extends Controller
         $organization = auth()->user()->organization;
         $days = $request->input('days', []);
 
-        // ✅ التحقق
         foreach ($days as $dayOfWeek => $data) {
 
-            $isHoliday = isset($data['is_holiday']);
+            $isHoliday = !empty($data['is_holiday']);
 
             if (!$isHoliday) {
-
                 if (empty($data['start_time']) || empty($data['end_time'])) {
                     return back()
                         ->withErrors([
@@ -77,8 +72,9 @@ class WorkingHourController extends Controller
             }
         }
 
-        // ✅ الحفظ
         foreach ($days as $dayOfWeek => $data) {
+
+            $isHoliday = !empty($data['is_holiday']);
 
             WorkingHour::updateOrCreate(
                 [
@@ -86,8 +82,8 @@ class WorkingHourController extends Controller
                     'day_of_week'     => $dayOfWeek,
                 ],
                 [
-                    'start_time' => isset($data['is_holiday']) ? null : $data['start_time'],
-                    'end_time'   => isset($data['is_holiday']) ? null : $data['end_time'],
+                    'start_time' => $isHoliday ? null : $data['start_time'],
+                    'end_time'   => $isHoliday ? null : $data['end_time'],
                 ]
             );
         }

@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,11 +10,16 @@ use Illuminate\Support\Facades\App;
 */
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\Admin\AdminUserController;
 
-// Customer
+// Customer (Authenticated)
 use App\Http\Controllers\User\HomeController as UserHomeController;
 use App\Http\Controllers\User\BookingController;
 use App\Http\Controllers\User\ProviderApplyController;
+use App\Http\Controllers\User\ReviewController;
+
+// Public (QR - Guest)
+use App\Http\Controllers\PublicBookingController;
 
 // Manager
 use App\Http\Controllers\Manager\OnboardingController;
@@ -30,9 +34,9 @@ use App\Http\Controllers\Manager\BusyTimeController;
 | Public Pages
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn () => view('welcome'));
-Route::view('/about', 'about');
-Route::view('/contact', 'contact');
+Route::view('/', 'welcome')->name('welcome');
+Route::view('/about', 'about')->name('about');
+Route::view('/contact', 'contact')->name('contact');
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +47,7 @@ Auth::routes();
 
 /*
 |--------------------------------------------------------------------------
-| Home
+| Authenticated Users (Customer)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
@@ -53,26 +57,30 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/home', [UserHomeController::class, 'index'])
         ->name('user.home');
 
-    // ✅ حجوزات الزبون (موحد)
+    /* ===== Customer Bookings ===== */
     Route::get('/my-bookings', [BookingController::class, 'index'])
         ->name('customer.bookings');
 
-    Route::patch('/my-bookings/{booking}/cancel',
-        [BookingController::class, 'cancel']
-    )->name('customer.bookings.cancel');
+    Route::get('/my-bookings/{booking}/edit', [BookingController::class, 'edit'])
+        ->name('customer.bookings.edit');
 
-    Route::get('/my-bookings/{booking}/edit',
-        [BookingController::class, 'edit']
-    )->name('customer.bookings.edit');
+    Route::patch('/my-bookings/{booking}', [BookingController::class, 'update'])
+        ->name('customer.bookings.update');
 
-    Route::patch('/my-bookings/{booking}',
-        [BookingController::class, 'update']
-    )->name('customer.bookings.update');
+    Route::patch('/my-bookings/{booking}/cancel', [BookingController::class, 'cancel'])
+        ->name('customer.bookings.cancel');
+
+    /* ===== Reviews ===== */
+    Route::get('/reviews/{booking}/create', [ReviewController::class, 'create'])
+        ->name('reviews.create');
+
+    Route::post('/reviews/{booking}', [ReviewController::class, 'store'])
+        ->name('reviews.store');
 });
 
 /*
 |--------------------------------------------------------------------------
-| Booking Flow (Customer)
+| Booking Flow (Public - Create Booking)
 |--------------------------------------------------------------------------
 */
 Route::post('/booking/confirm', [BookingController::class, 'storeSession'])
@@ -86,12 +94,15 @@ Route::get('/booking/confirm', function () {
 Route::post('/booking/store', [BookingController::class, 'store'])
     ->name('booking.store');
 
-Route::get('/booking/success', fn () => view('booking.success'))
+Route::view('/booking/success', 'booking.success')
     ->name('booking.success');
+
+Route::get('/user/available-times', [BookingController::class, 'availableTimes'])
+    ->name('user.available-times');
 
 /*
 |--------------------------------------------------------------------------
-| Provider Apply
+| Provider Apply (Authenticated)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
@@ -105,7 +116,7 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Manager Onboarding (إنشاء / تعديل الشركة)
+| Manager Onboarding
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')
@@ -113,7 +124,6 @@ Route::middleware('auth')
     ->name('manager.onboarding.')
     ->group(function () {
 
-        // ✅ نفس الصفحة للإنشاء والتعديل
         Route::get('/company', [OnboardingController::class, 'company'])
             ->name('company');
 
@@ -135,10 +145,6 @@ Route::middleware('auth')
 
 /*
 |--------------------------------------------------------------------------
-| Manager Dashboard
-|--------------------------------------------------------------------------
-
-|--------------------------------------------------------------------------
 | Manager Area
 |--------------------------------------------------------------------------
 */
@@ -147,22 +153,9 @@ Route::middleware('auth')
     ->name('manager.')
     ->group(function () {
 
-        /* ================= Dashboard ================= */
         Route::get('/dashboard', [ManagerDashboardController::class, 'index'])
             ->name('dashboard');
 
-        /* ================= Organization ================= */
-
-        // ✏️ تعديل معلومات المنظمة
-        Route::get('/organization/edit',
-            [\App\Http\Controllers\Manager\OrganizationController::class, 'edit']
-        )->name('organization.edit');
-
-        Route::post('/organization/update',
-            [\App\Http\Controllers\Manager\OrganizationController::class, 'update']
-        )->name('organization.update');
-
-        /* ================= Services ================= */
         Route::get('/services', [ManagerServiceController::class, 'index'])
             ->name('services');
 
@@ -175,28 +168,66 @@ Route::middleware('auth')
         Route::delete('/services/{service}', [ManagerServiceController::class, 'destroy'])
             ->name('services.destroy');
 
-        /* ================= Working Hours ================= */
         Route::get('/working-hours', [WorkingHourController::class, 'index'])
             ->name('working-hours');
 
         Route::post('/working-hours', [WorkingHourController::class, 'store'])
             ->name('working-hours.store');
 
-        /* ================= Busy Times ================= */
         Route::post('/busy-times', [BusyTimeController::class, 'store'])
             ->name('busy-times.store');
 
         Route::delete('/busy-times/{busyTime}', [BusyTimeController::class, 'destroy'])
             ->name('busy-times.destroy');
 
-        /* ================= Bookings ================= */
         Route::get('/bookings', [ManagerBookingController::class, 'index'])
             ->name('bookings');
 
-        Route::post('/bookings/{booking}/cancel',
-            [ManagerBookingController::class, 'cancel']
-        )->name('bookings.cancel');
+        Route::post('/bookings/{booking}/complete', [ManagerBookingController::class, 'complete'])
+            ->name('bookings.complete');
+
+        Route::post('/bookings/{booking}/no-show', [ManagerBookingController::class, 'noShow'])
+            ->name('bookings.noShow');
+
+        Route::post('/bookings/{booking}/cancel', [ManagerBookingController::class, 'cancel'])
+            ->name('bookings.cancel');
     });
+
+/*
+|--------------------------------------------------------------------------
+| Admin Area
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/users', [AdminUserController::class, 'index'])
+            ->name('users.index');
+
+        Route::patch('/users/{user}/toggle', [AdminUserController::class, 'toggleStatus'])
+            ->name('users.toggle');
+
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])
+            ->name('users.destroy');
+
+        Route::get('/users/{user}', [AdminUserController::class, 'show'])
+            ->name('users.show');
+
+        Route::get('/admins/create', [AdminUserController::class, 'createAdmin'])
+            ->name('admins.create');
+
+        Route::post('/admins', [AdminUserController::class, 'storeAdmin'])
+            ->name('admins.store');
+
+        Route::patch('/customers/{booking}/block', [AdminUserController::class, 'blockCustomer'])
+            ->name('customers.block');
+
+        Route::delete('/customers/{booking}', [AdminUserController::class, 'deleteCustomer'])
+            ->name('customers.delete');
+    });
+
 /*
 |--------------------------------------------------------------------------
 | Public Organization (QR)
@@ -213,16 +244,16 @@ Route::get('/org/{slug}/services/{service}', [OrganizationController::class, 'ti
 
 /*
 |--------------------------------------------------------------------------
-| Admin
+| Public Previous Bookings (QR - Guest)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'admin'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('/dashboard', fn () => view('admin.dashboard'))
-            ->name('dashboard');
-    });
+Route::post('/public/bookings/lookup',
+    [PublicBookingController::class, 'lookup']
+)->name('public.bookings.lookup');
+
+Route::get('/public/bookings/result',
+    [PublicBookingController::class, 'result']
+)->name('public.bookings.result');
 
 /*
 |--------------------------------------------------------------------------
@@ -233,7 +264,6 @@ Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['ar', 'en'])) {
         session(['locale' => $locale]);
     }
-
     return redirect()->back();
 })->name('lang.switch');
 

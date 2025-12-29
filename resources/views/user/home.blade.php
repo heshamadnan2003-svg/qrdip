@@ -69,10 +69,11 @@
             </h6>
 
             @if(auth()->user()->organization)
-                <a href="{{ route('manager.organization.create') }}"
-                   class="btn btn-outline-primary w-100 mb-2">
-                    ✏️ {{ __('messages.edit_company_info') }}
-                </a>
+    <a href="{{ route('manager.organization.edit') }}"
+       class="btn btn-outline-primary w-100 mb-2">
+        ✏️ {{ __('messages.edit_company_info') }}
+    </a>
+
 
                 <form method="POST" action="#">
                     @csrf

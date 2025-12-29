@@ -14,13 +14,26 @@ use App\Models\Service;
 class OrganizationController extends Controller
 {
     public function show($slug)
-    {
-        $organization = Organization::where('slug', $slug)
-            ->where('is_active', true)
-            ->firstOrFail();
+{
+    $organization = Organization::with([
+        'services',
+        'reviews.user' // 👈 تحميل التقييمات مع اسم صاحب التقييم
+    ])
+    ->where('slug', $slug)
+    ->where('is_active', true)
+    ->firstOrFail();
 
-        return view('organization.show', compact('organization'));
-    }
+    // ⭐ حساب متوسط التقييم
+    $averageRating = round($organization->reviews->avg('rating'), 1);
+    $reviewsCount  = $organization->reviews->count();
+
+    return view('organization.show', compact(
+        'organization',
+        'averageRating',
+        'reviewsCount'
+    ));
+}
+
 
   public function services($slug)
 {

@@ -29,6 +29,10 @@ public function service()
     return $this->belongsTo(\App\Models\Service::class);
 }
 
+public function review()
+{
+    return $this->hasOne(\App\Models\Review::class);
+}
 
 
 }

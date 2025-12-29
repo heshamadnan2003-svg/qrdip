@@ -300,7 +300,128 @@ return [
 'home' => 'Home',
 
   'manager_bookings_title'=> 'Customer Bookings',
-  'no_manager_bookings'=> 'No bookings available'
+  'no_manager_bookings'=> 'No bookings available',
+
+'reviews' => 'Reviews',
+'leave_review' => 'Leave a Review',
+'rating' => 'Rating',
+'choose_rating' => 'Choose rating',
+'comment_optional' => 'Comment (optional)',
+'comment_placeholder' => 'Write your feedback...',
+'submit_review' => 'Submit Review',
+'review_submitted' => 'Review submitted successfully',
+'review_already_submitted' => 'You have already reviewed this booking',
+
+
+  'mark_as_completed' => 'Mark as completed',
+  'booking_completed' => 'Booking marked as completed',
+
+'choose_time' => 'Choose time',
+'no_available_times' => 'No available times for this date',
+'time_slot_already_booked' => 'Sorry, this time slot has just been booked. Please choose another time.',
+'booking_confirmed' => 'Confirmed',
+'booking_completed' => 'Completed',
+'booking_no_show'   => 'No Show',
+'booking_cancelled' => 'Cancelled',
+'booking_unknown'   => 'Unknown Status',
+'active' => 'Active',
+    'inactive' => 'Inactive',
+    'toggle_status' => 'Toggle Status',
+    'status_updated' => 'User status updated',
+'manager_details' => 'Manager Details',
+'account_info' => 'Account Information',
+'registered_at' => 'Registered At',
+'company_name' => 'Company Name',
+'services' => 'Services',
+'minutes' => 'minutes',
+'no_services' => 'No services found',
+'bookings' => 'Bookings',
+'phone' => 'Phone',
+'back' => 'Back',
+'block_customer' => 'Block Customer',
+'delete_customer' => 'Delete Customer',
+'customer_blocked' => 'Customer blocked',
+'customer_deleted' => 'Customer deleted',
+'confirm_delete_customer' => 'Do you really want to delete this customer? This action cannot be undone.',
+
+"manager_details" =>"Manager Details",
+  "account_information"=>"Account Information",
+  "name"=> "Name",
+  "email"=> "Email",
+  "role"=> "Role",
+  "registered_at"=> "Registered At",
+  "status"=> "Status",
+  "active"=> "Active",
+  "inactive"=> "Inactive",
+
+  "company_information"=> "Company Information",
+  "company_name"=> "Company Name",
+  "description"=> "Description",
+
+  "services"=> "Services",
+  "bookings"=> "Bookings",
+
+  "customer_name"=> "Customer Name",
+  "customer_phone"=> "Phone Number",
+  "service"=>"Service",
+  "date"=> "Date",
+  "time"=> "Time",
+  "booking_status"=> "Booking Status",
+
+  "back"=> "Back",
+
+  "confirm_delete_customer"=> "Are you sure you want to delete this customer? All related data will be permanently removed.",
+"add_admin" => "Add Admin",
+"create_admin"=> "Create New Admin",
+"admin_created" => "Admin created successfully",
+"rating" => "Rating",
+
+"reviews" => "Reviews",
+"no_reviews" => "No reviews yet",
+'status_confirmed' => 'Confirmed',
+'status_completed' => 'Completed',
+'status_no_show'   => 'No Show',
+'status_cancelled' => 'Cancelled',
+'status_blocked'   => 'Blocked',
+
+
+  "admin_panel"=> "Admin Panel",
+
+
+  
+  "add_admin"=> "Add Admin",
+  "add_new_admin"=> "Add New Admin",
+  "admin_created_successfully"=> "Admin created successfully",
+  "confirm_password"=> "Confirm Password",
+
+
+  "users_management"=> "Users Management",
+  "add_admin"=> "Add Admin",
+  "view"=> "View",
+  "toggle_status"=> "Toggle Status",
+  "delete"=> "Delete",
+  "active"=> "Active",
+  "inactive"=> "Inactive",
+  "status"=> "Status",
+  "role"=> "Role",
+  "rating"=> "Rating",
+  "actions"=> "Actions",
+  "admin_panel"=> "Admin Panel",
+  "confirm_delete"=> "Are you sure you want to delete?",
+  "customer_blocked"=> "Customer blocked",
+  "customer_deleted"=> "Customer deleted",
+  "add_admin_success"=> "Admin added successfully",
+  "users"=> "Users",
+  "admin"=> "Admin",
+  "manager"=> "Manager",
+  "user"=> "User",
+
+
+  "wait_for_completion"=> "Please wait until the appointment is completed ⏳",
+
+
+  "app_name"=> "QRDIP",
+  "app_tagline"=> "Smart QR-based Appointment Booking System",
 
 
 ];

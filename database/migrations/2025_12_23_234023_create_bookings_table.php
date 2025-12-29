@@ -28,11 +28,23 @@ return new class extends Migration {
             // بيانات العميل
             $table->string('customer_name');
             $table->string('customer_phone', 20);
-            $table->string('customer_email');              // ✅ جديد (إجباري)
-            $table->string('customer_address')->nullable(); // ✅ جديد (اختياري)
+            $table->string('customer_email');
+            $table->string('customer_address')->nullable();
 
-            // حالة الحجز
+            /*
+             |-----------------------------------------
+             | حالة الحجز
+             |-----------------------------------------
+             | pending    : تم الحجز (قبل التأكيد)
+             | confirmed  : مؤكد
+             | completed  : حضر الزبون وتم تنفيذ الموعد
+             | no_show    : الزبون لم يحضر
+             | cancelled  : تم الإلغاء
+             */
             $table->string('status')->default('confirmed');
+
+            // وقت اتخاذ القرار (اختياري – احترافي)
+            $table->timestamp('decided_at')->nullable();
 
             $table->timestamps();
 

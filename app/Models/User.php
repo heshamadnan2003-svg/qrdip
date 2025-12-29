@@ -32,6 +32,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+   
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+
+
     protected function casts(): array
     {
         return [
@@ -68,5 +75,10 @@ class User extends Authenticatable
 {
     return $this->hasOne(\App\Models\Organization::class);
 }
+public function reviews()
+{
+    return $this->hasMany(Review::class);
+}
+
 
 }

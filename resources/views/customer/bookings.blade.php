@@ -18,12 +18,12 @@
 
                     <p>
                         <strong>{{ __('messages.service') }}:</strong>
-                        {{ $booking->service->name }}
+                        {{ $booking->service->name ?? '-' }}
                     </p>
 
                     <p>
                         <strong>{{ __('messages.price') }}:</strong>
-                        {{ number_format($booking->service->price, 2) }}
+                        {{ number_format($booking->service->price ?? 0, 2) }}
                         {{ __('messages.currency') }}
                     </p>
 
@@ -37,6 +37,7 @@
                         {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}
                     </p>
 
+                    {{-- حالة الحجز --}}
                     <p>
                         <strong>{{ __('messages.status') }}:</strong>
 
@@ -44,6 +45,17 @@
                             <span class="badge bg-success">
                                 {{ __('messages.booking_confirmed') }}
                             </span>
+
+                        @elseif($booking->status === 'completed')
+                            <span class="badge bg-primary">
+                                {{ __('messages.booking_completed') }}
+                            </span>
+
+                        @elseif($booking->status === 'no_show')
+                            <span class="badge bg-warning text-dark">
+                                {{ __('messages.booking_no_show') }}
+                            </span>
+
                         @else
                             <span class="badge bg-danger">
                                 {{ __('messages.booking_cancelled') }}
@@ -51,17 +63,17 @@
                         @endif
                     </p>
 
-                    {{-- أزرار التحكم --}}
+                    {{-- أزرار التعديل والإلغاء (فقط إذا كان مؤكد) --}}
                     @if($booking->status === 'confirmed')
                         <div class="d-flex gap-2 justify-content-end mt-3">
 
-                            <a href="{{ route('customer.bookings.edit', $booking->id) }}"
+                            <a href="{{ route('customer.bookings.edit', $booking) }}"
                                class="btn btn-sm btn-outline-primary">
                                 ✏️ {{ __('messages.edit') }}
                             </a>
 
                             <form method="POST"
-                                  action="{{ route('customer.bookings.cancel', $booking->id) }}">
+                                  action="{{ route('customer.bookings.cancel', $booking) }}">
                                 @csrf
                                 @method('PATCH')
 

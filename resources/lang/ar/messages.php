@@ -300,6 +300,129 @@ return [
   "manager_bookings_title"=> "حجوزات الزبائن",
   "no_manager_bookings"=> "لا توجد حجوزات حالياً",
 
+'reviews' => 'التقييمات',
+'leave_review' => 'إضافة تقييم',
+'rating' => 'التقييم',
+'choose_rating' => 'اختر عدد النجوم',
+'comment_optional' => 'تعليق (اختياري)',
+'comment_placeholder' => 'اكتب رأيك هنا...',
+'submit_review' => 'إرسال التقييم',
+'review_submitted' => 'تم إرسال التقييم بنجاح',
+'review_already_submitted' => 'لقد قمت بتقييم هذا الحجز مسبقًا',
+
+  'mark_as_completed'=>'تم تنفيذ الحجز',
+  'booking_completed'=>"تم تأكيد الحجز بنجاح",
+
+'choose_time' => 'اختر الوقت',
+'no_available_times' => 'لا توجد أوقات متاحة في هذا اليوم',
+'time_slot_already_booked' => 'عذرًا، هذا الموعد تم حجزه للتو. الرجاء اختيار وقت آخر.',
+'booking_confirmed' => 'مؤكد',
+'booking_completed' => 'تم تنفيذ الموعد',
+'booking_no_show'   => 'لم يحضر الزبون',
+'booking_cancelled' => 'ملغي',
+'booking_unknown'   => 'حالة غير معروفة',
+ 'active' => 'نشط',
+    'inactive' => 'موقوف',
+    'toggle_status' => 'تبديل الحالة',
+    'status_updated' => 'تم تحديث حالة المستخدم',
+'manager_details' => 'تفاصيل المدير',
+'account_info' => 'بيانات الحساب',
+'registered_at' => 'تاريخ التسجيل',
+'company_name' => 'اسم الشركة',
+'services' => 'الخدمات',
+'minutes' => 'دقيقة',
+'no_services' => 'لا توجد خدمات',
+'bookings' => 'الحجوزات',
+'phone' => 'الهاتف',
+'back' => 'رجوع',
+'block_customer' => 'إيقاف الزبون',
+'delete_customer' => 'حذف الزبون',
+'customer_blocked' => 'تم إيقاف الزبون',
+'customer_deleted' => 'تم حذف الزبون',
+'confirm_delete_customer' => 'هل ترغب فعلًا في حذف هذا الزبون؟ هذا الإجراء لا يمكن التراجع عنه.',
+
+  "manager_details"=> "تفاصيل المدير",
+  "account_information"=>"معلومات الحساب",
+  "name"=> "الاسم",
+  "email"=> "البريد الإلكتروني",
+  "role"=> "الدور",
+  "registered_at"=> "تاريخ التسجيل",
+  "status"=> "الحالة",
+  "active"=> "نشط",
+  "inactive"=> "موقوف",
+
+  "company_information"=> "معلومات الشركة",
+  "company_name"=> "اسم الشركة",
+  "description"=> "الوصف",
+
+  "services"=> "الخدمات",
+  "bookings"=> "الحجوزات",
+
+  "customer_name"=> "اسم الزبون",
+  "customer_phone"=> "رقم الهاتف",
+  "service"=> "الخدمة",
+  "date"=> "التاريخ",
+  "time"=> "الوقت",
+  "booking_status"=> "حالة الحجز",
+
+  "back"=> "رجوع",
+
+
+  "confirm_delete_customer"=> "هل أنت متأكد من حذف هذا الزبون؟ سيتم حذف جميع بياناته ولا يمكن التراجع عن هذا الإجراء.",
+
+"add_admin" => "إضافة أدمن",
+"create_admin"=> "إنشاء أدمن جديد",
+"admin_created" => "تم إنشاء الأدمن بنجاح",
+"rating"=> "التقييم",
+"reviews"=> "تقييمات",
+"no_reviews"=> "لا توجد تقييمات بعد",
+
+'status_confirmed' => 'مؤكد',
+'status_completed' => 'تم تنفيذ الموعد',
+'status_no_show'   => 'لم يحضر الزبون',
+'status_cancelled' => 'ملغي',
+'status_blocked'   => 'محظور',
+
+  "admin_panel"=> "لوحة الأدمن",
+
+
+  "add_admin"=> "إضافة أدمن",
+  "add_new_admin"=> "إضافة أدمن جديد",
+  "admin_created_successfully" =>"تم إنشاء الأدمن بنجاح",
+  "confirm_password"=> "تأكيد كلمة المرور",
+
+
+  "users_management"=> "إدارة المستخدمين",
+  "add_admin"=> "إضافة أدمن",
+  "view"=> "عرض",
+  "toggle_status"=> "تبديل الحالة",
+  "delete"=> "حذف",
+  "active"=> "نشط",
+  "inactive"=> "غير نشط",
+  "status"=> "الحالة",
+  "role"=> "الدور",
+  "rating"=> "التقييم",
+  "actions"=> "الإجراءات",
+  "admin_panel"=> "لوحة الأدمن",
+  "confirm_delete"=> "هل أنت متأكد من الحذف؟",
+  "customer_blocked"=> "تم حظر الزبون",
+  "customer_deleted"=> "تم حذف الزبون",
+  "add_admin_success"=> "تم إضافة الأدمن بنجاح",
+  "users"=> "المستخدمون",
+  "admin"=> "أدمن",
+  "manager"=> "مدير",
+  "user"=> "مستخدم",
+
+  "time_already_booked" => "هذا الوقت محجوز بالفعل، الرجاء اختيار وقت آخر",
+
+  "wait_for_completion"=> "يرجى الانتظار حتى يتم تنفيذ الموعد ⏳",
+
+
+  "app_name"=> "QRDIP",
+  "app_tagline"=> "نظام حجز مواعيد ذكي باستخدام رمز QR",
+
+
+
 
 ];
 

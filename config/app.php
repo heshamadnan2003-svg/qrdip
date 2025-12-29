@@ -194,6 +194,7 @@ return [
         
         // إذا كان لديك Service Providers أخرى أضفها هنا
         // App\Providers\CustomServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
 
     ],
 

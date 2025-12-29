@@ -27,34 +27,47 @@
     <div class="container">
 
         {{-- Brand --}}
-        <a class="navbar-brand fw-bold" href="{{ url('/') }}">
-            {{ __('messages.app_name') }}
-        </a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
+    <img src="{{ asset('images/qrdip-logo.png') }}"
+         alt="QRDIP Logo"
+         style="height:50px; width:auto;">
+    <span class="fw-bold">
+        {{ __('messages.app_name') }}
+    </span>
+</a>
 
-        {{-- Home Button --}}
+
+        {{-- زر الرئيسية (Admin + Manager فقط، ويُخفى في صفحات الحجز) --}}
         @auth
-            @if(auth()->user()->role === 'manager')
-                <a href="{{ route('manager.dashboard') }}"
-                   class="btn btn-outline-light btn-sm ms-2">
-                    🏠 {{ __('messages.home') }}
-                </a>
-            @else
-                <a href="{{ route('user.home') }}"
-                   class="btn btn-outline-light btn-sm ms-2">
-                    🏠 {{ __('messages.home') }}
-                </a>
+            @php
+                $role = auth()->user()->role;
+
+                $hideHome =
+                    request()->is('org/*') ||
+                    request()->is('booking/*') ||
+                    request()->is('my-bookings');
+            @endphp
+
+            @if(!$hideHome)
+                @if($role === 'admin')
+                    <a href="{{ route('admin.users.index') }}"
+                       class="btn btn-outline-light mx-1">
+                        🏠 {{ __('messages.home') }}
+                    </a>
+
+                @elseif($role === 'manager')
+                    <a href="{{ route('manager.dashboard') }}"
+                       class="btn btn-outline-light mx-1">
+                        🏠 {{ __('messages.home') }}
+                    </a>
+                @endif
             @endif
-        @else
-            <a href="{{ url('/') }}"
-               class="btn btn-outline-light btn-sm ms-2">
-                🏠 {{ __('messages.home') }}
-            </a>
         @endauth
 
         {{-- Right Side --}}
         <div class="ms-auto d-flex align-items-center gap-2">
 
-            {{-- Language Switch --}}
+            {{-- Language --}}
             <a href="{{ route('lang.switch', app()->getLocale() === 'ar' ? 'en' : 'ar') }}"
                class="btn btn-outline-light btn-sm">
                 {{ app()->getLocale() === 'ar' ? 'EN' : 'AR' }}
@@ -67,22 +80,34 @@
                 🌙
             </button>
 
-            {{-- User Buttons --}}
+            {{-- Authenticated --}}
             @auth
-                @if(!auth()->user()->organization)
-    <a href="{{ route('customer.bookings') }}"
-       class="btn btn-outline-info btn-sm">
-        📅 {{ __('messages.my_bookings') }}
-    </a>
-@endif
 
+                {{-- User فقط --}}
+                @if(auth()->user()->role === 'user')
+                    <a href="{{ route('customer.bookings') }}"
+                       class="btn btn-outline-info btn-sm">
+                        📅 {{ __('messages.my_bookings') }}
+                    </a>
+                @endif
 
+                {{-- Admin Panel --}}
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.users.index') }}"
+                       class="btn btn-outline-danger btn-sm">
+                        🛡 {{ __('messages.admin_panel') }}
+                    </a>
+                @endif
+
+                {{-- Logout --}}
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="btn btn-danger btn-sm">
                         🚪 {{ __('messages.logout') }}
                     </button>
                 </form>
+
+            {{-- Guest --}}
             @else
                 <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">
                     {{ __('messages.login') }}
@@ -100,25 +125,6 @@
 <main class="py-5">
     @yield('content')
 </main>
-
-{{-- Alerts --}}
-@if(session('success'))
-    <div class="container mt-3">
-        <div class="alert alert-success alert-dismissible fade show">
-            ✅ {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="container mt-3">
-        <div class="alert alert-danger alert-dismissible fade show">
-            ❌ {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    </div>
-@endif
 
 <footer class="text-center py-3 text-muted">
     © {{ date('Y') }} {{ __('messages.app_name') }}

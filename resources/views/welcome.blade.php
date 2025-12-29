@@ -26,12 +26,21 @@
         </div>
 
         {{-- صورة --}}
-        <div class="col-md-6 text-center">
-            <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png"
-                 alt="{{ __('messages.welcome_image_alt') }}"
-                 class="img-fluid"
-                 style="max-width: 320px">
-        </div>
+        <div class="text-center my-5">
+    <img src="{{ asset('images/qrdip-logo.png') }}"
+         alt="QRDIP Logo"
+         class="mb-4"
+         style="max-width:520px; width:100%;">
+
+    <h1 class="fw-bold">
+        {{ __('messages.app_name') }}
+    </h1>
+
+    <p class="text-muted mt-2">
+        {{ __('messages.app_tagline') }}
+    </p>
+</div>
+
 
     </div>
 
