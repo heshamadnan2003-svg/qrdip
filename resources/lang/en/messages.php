@@ -423,5 +423,8 @@ return [
   "app_name"=> "QRDIP",
   "app_tagline"=> "Smart QR-based Appointment Booking System",
 
+  "رجوع"=> "Back",
+
+
 
 ];

@@ -24,20 +24,29 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container">
+    <div class="container d-flex align-items-center">
 
         {{-- Brand --}}
         <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
-    <img src="{{ asset('images/qrdip-logo.png') }}"
-         alt="QRDIP Logo"
-         style="height:50px; width:auto;">
-    <span class="fw-bold">
-        {{ __('messages.app_name') }}
-    </span>
-</a>
+            <img src="{{ asset('images/qrdip-logo.png') }}"
+                 alt="QRDIP Logo"
+                 style="height:50px; width:auto;">
+            <span class="fw-bold">
+                {{ __('messages.app_name') }}
+            </span>
+        </a>
 
+        {{-- Back Button (hidden on welcome) --}}
+        @if (!request()->routeIs('welcome'))
+            <button type="button"
+        onclick="window.history.back()"
+        class="btn btn-outline-light btn-sm ms-2">
+    ⬅ {{ __('messages.back') }}
+</button>
 
-        {{-- زر الرئيسية (Admin + Manager فقط، ويُخفى في صفحات الحجز) --}}
+        @endif
+
+        {{-- Home Button (Admin + Manager only, hidden on booking pages) --}}
         @auth
             @php
                 $role = auth()->user()->role;
@@ -51,13 +60,12 @@
             @if(!$hideHome)
                 @if($role === 'admin')
                     <a href="{{ route('admin.users.index') }}"
-                       class="btn btn-outline-light mx-1">
+                       class="btn btn-outline-light btn-sm mx-2">
                         🏠 {{ __('messages.home') }}
                     </a>
-
                 @elseif($role === 'manager')
                     <a href="{{ route('manager.dashboard') }}"
-                       class="btn btn-outline-light mx-1">
+                       class="btn btn-outline-light btn-sm mx-2">
                         🏠 {{ __('messages.home') }}
                     </a>
                 @endif
@@ -80,10 +88,9 @@
                 🌙
             </button>
 
-            {{-- Authenticated --}}
+            {{-- Auth --}}
             @auth
 
-                {{-- User فقط --}}
                 @if(auth()->user()->role === 'user')
                     <a href="{{ route('customer.bookings') }}"
                        class="btn btn-outline-info btn-sm">
@@ -91,7 +98,6 @@
                     </a>
                 @endif
 
-                {{-- Admin Panel --}}
                 @if(auth()->user()->role === 'admin')
                     <a href="{{ route('admin.users.index') }}"
                        class="btn btn-outline-danger btn-sm">
@@ -99,7 +105,6 @@
                     </a>
                 @endif
 
-                {{-- Logout --}}
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="btn btn-danger btn-sm">
@@ -107,7 +112,6 @@
                     </button>
                 </form>
 
-            {{-- Guest --}}
             @else
                 <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">
                     {{ __('messages.login') }}
